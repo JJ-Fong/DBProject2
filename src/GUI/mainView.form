@@ -19,17 +19,11 @@
                     <Property name="text" type="java.lang.String" value="Agregar Campo"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Borrar Campo"/>
-                  </Properties>
-                </MenuItem>
               </SubComponents>
             </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ayuda"/>
-                <Property name="actionCommand" type="java.lang.String" value="Ayuda"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -136,7 +130,6 @@
               <Image iconType="3" name="/GUI/FinalSettings.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Filtrar"/>
-            <Property name="actionCommand" type="java.lang.String" value="Filtrar"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -154,6 +147,9 @@
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

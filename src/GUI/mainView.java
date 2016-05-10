@@ -5,8 +5,8 @@
  */
 package GUI;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import Logic.DBManager;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,10 +17,13 @@ public class mainView extends javax.swing.JFrame {
     /**
      * Creates new form mainView
      */
+    DBManager dbman; 
+    
     public mainView() {
         
         initComponents();
-    
+        dbman = new DBManager();
+        
     }
 
     /**
@@ -45,7 +48,6 @@ public class mainView extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,7 +88,6 @@ public class mainView extends javax.swing.JFrame {
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/FinalSettings.png"))); // NOI18N
         jButton6.setText("Filtrar");
-        jButton6.setActionCommand("Filtrar");
         jButton6.setBorderPainted(false);
         jButton6.setFocusable(false);
         jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -99,6 +100,11 @@ public class mainView extends javax.swing.JFrame {
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton5);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -121,13 +127,9 @@ public class mainView extends javax.swing.JFrame {
         jMenuItem2.setText("Agregar Campo");
         jMenu3.add(jMenuItem2);
 
-        jMenuItem3.setText("Borrar Campo");
-        jMenu3.add(jMenuItem3);
-
         jMenu1.add(jMenu3);
 
         jMenuItem1.setText("Ayuda");
-        jMenuItem1.setActionCommand("Ayuda");
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -152,6 +154,20 @@ public class mainView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jButton5ActionPerformed
+    
+    private void getEverything() { 
+        ArrayList results = dbman.executeQuery("SELECT * FROM client");
+        ArrayList title = dbman.getColumns("client"); 
+        this.setTable(results, title);
+    }
+    
+    private void setTable(ArrayList data, ArrayList title) { 
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -186,7 +202,7 @@ public class mainView extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -199,7 +215,6 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
