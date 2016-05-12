@@ -83,6 +83,7 @@ public class DBManager {
         return columnNames; 
     }
     
+    
     /*
     EJECUTA EL QUERY INGRESADO COMO STRING, Y REGRESA EN UN ARRAYLIST LO QUE SEA QUE REQUIERA EL QUERY
     */
@@ -91,15 +92,26 @@ public class DBManager {
         try { 
             ResultSet rs = stm.executeQuery(query); 
             ResultSetMetaData rsmd = rs.getMetaData();
-            ArrayList row = new ArrayList(); 
-            
-            for (int i = 0; i < rsmd.getColumnCount(); i++){
-                row.add(rs.getString(i+1)); 
+            while (rs.next()) { 
+                ArrayList row = new ArrayList();
+                for (int i = 0; i < rsmd.getColumnCount(); i++){
+                    row.add(rs.getString(i+1)); 
+                }
+                result.add(row); 
             }
-            result.add(row); 
         } catch (Exception e) { 
             result.add(e.getStackTrace().toString()); 
         }
         return result; 
+    }
+    
+    public ResultSet executeQueryV2(String query){
+        ResultSet rs = null;
+        try { 
+            rs = stm.executeQuery(query); 
+        } catch (Exception e) { 
+            
+        }
+        return rs; 
     }
 }
