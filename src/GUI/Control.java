@@ -103,9 +103,9 @@ public class Control extends JFrame {
         ArrayList<String> tipUsers = new ArrayList();
         ArrayList<String> tipUsersDB = new ArrayList();
         ArrayList<String> ventas = new ArrayList();
-        ArrayList dataType = dbman.executeQuery("select t.name from client c join venta v on (v.client_id = c.id) join type t on (t.id = c.type_id);");
-        ArrayList dataTUser = dbman.executeQuery("select distinct t.name from client c join type t on (c.type_id = t.id);");
-        ArrayList dataVenta = dbman.executeQuery("select v.total from client c join venta v on (v.client_id = c.id) join type t on (t.id = c.type_id);");
+        ArrayList dataType = dbman.executeQuery("select t.name from client c join venta v on (v.client_id = c.id) join tipo t on (t.id = c.tipo_id);");
+        ArrayList dataTUser = dbman.executeQuery("select distinct t.name from client c join tipo t on (c.tipo_id = t.id);");
+        ArrayList dataVenta = dbman.executeQuery("select v.total from client c join venta v on (v.client_id = c.id) join tipo t on (t.id = c.tipo_id);");
         
         for (int i = 0; i < dataType.size(); i++) {
             ArrayList temp = (ArrayList) dataType.get(i);
@@ -199,9 +199,9 @@ public class Control extends JFrame {
         ArrayList<String> Paises = new ArrayList();
         ArrayList<String> PaisesDB = new ArrayList();
         JOptionPane.showMessageDialog(null, "Gráfica No. 2 - Países con más Clientes");
-        ArrayList dataPais = dbman.executeQuery("select con.name from client c join country con on (c.country_id = con.id) join type t on (t.id = c.type_id);");
+        ArrayList dataPais = dbman.executeQuery("select con.name from client c join country con on (c.country_id = con.id) join tipo t on (t.id = c.tipo_id);");
         ArrayList PaisTabla = dbman.executeQuery("select name from country order by id;");
-        ArrayList dataUser = dbman.executeQuery("select t.name from client c join country con on (c.country_id = con.id) join type t on (t.id = c.type_id);");
+        ArrayList dataUser = dbman.executeQuery("select t.name from client c join country con on (c.country_id = con.id) join tipo t on (t.id = c.tipo_id);");
         for (int i = 0; i < dataPais.size(); i++) {
             ArrayList temp = (ArrayList) dataPais.get(i);
             Paises.add((String) temp.get(0));

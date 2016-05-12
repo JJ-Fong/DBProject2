@@ -366,8 +366,12 @@ public class mainView extends javax.swing.JFrame {
                 }
             }
             newValues.add(value); 
+            if (accepted) { 
+                
+            }
             i++;
         }
+        
         System.out.println(newValues);
     }//GEN-LAST:event_jButton1ActionPerformed
     private boolean checkType(String value, String type) { 
@@ -427,23 +431,18 @@ public class mainView extends javax.swing.JFrame {
         // TODO add your handling code here:
         edit(); 
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    
+    private void modificar(String id) { 
+        
+    }
+    
     public void edit() { 
         int row = jTable1.getSelectedRow(); 
         if (row > -1) { 
             ArrayList reg = (ArrayList) data.get(row); 
             String id = String.valueOf(reg.get(0)); 
             //AQUI VA ACTUALIZAR - EN ID ESTA EL ID
-            //System.out.println(id);
-            ArrayList data = dbman.executeQuery("select c.first_name,c.last_name,c.email,g.name,c.joined,c.birthday,con.name,c.points,t.name,c.phone,c.picture,tw.username from  client c join gender g on (c.gender_id = g.id) join country con on (con.id = c.country_id) join type t on (t.id = c.type_id) join twitter tw on (tw.client_id = c.id) where c.id ="+id+ ";");
-            ArrayList<String> input = (ArrayList<String>) data.get(0);
-            if (!id.equals("0")){
-                //Actualizar(id,input);
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Debe Seleccionar un Cliente a Modificar");
-            }
-            prepTable(queryActual); 
+            modificar(id); 
         }
     }
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -566,9 +565,10 @@ public class mainView extends javax.swing.JFrame {
             i++; 
         }
         String value = (String) JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]);
-      
-        String query = "SELECT sq.month, sq.transacciones, sq.articulos, sq.totalMes, (sq.totalMes/total)*100 as porcentaje FROM (SELECT date_part('month',fecha) as month, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as totalmes, ventasxano.total as total FROM forreports JOIN ventasxano ON date_part('year', fecha) = ventasxano.\"año\" WHERE date_part('year',fecha) = "+value+" GROUP BY month, ventasxano.total ORDER BY month ASC) as sq;";
-        this.setReportTable(query, " VENTAS POR MES DEL AÑO "+value);
+        if (!value.equals("null")) { 
+            String query = "SELECT sq.month, sq.transacciones, sq.articulos, sq.totalMes, (sq.totalMes/total)*100 as porcentaje FROM (SELECT date_part('month',fecha) as month, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as totalmes, ventasxano.total as total FROM forreports JOIN ventasxano ON date_part('year', fecha) = ventasxano.\"año\" WHERE date_part('year',fecha) = "+value+" GROUP BY month, ventasxano.total ORDER BY month ASC) as sq;";
+            this.setReportTable(query, " VENTAS POR MES DEL AÑO "+value);
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -582,13 +582,14 @@ public class mainView extends javax.swing.JFrame {
             i++; 
         }
         String yearValue = (String) JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]);
-        String[] meses = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12"}; 
-        String monthValue = (String) JOptionPane.showInputDialog(null,"De que mes desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,meses,meses[0]);
-        
-        
-        
-        String query = "SELECT forreports.fecha, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as totaldia FROM forreports  WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+"  GROUP BY fecha ORDER BY fecha ASC";
-        this.setReportTable(query, " VENTAS POR MES DEL MES "+monthValue+" DEL AÑO "+yearValue);
+        if (!yearValue.equals("null")) {
+            String[] meses = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12"}; 
+            String monthValue = (String) JOptionPane.showInputDialog(null,"De que mes desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,meses,meses[0]);
+            if (!monthValue.equals("null")) { 
+                String query = "SELECT forreports.fecha, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as totaldia FROM forreports  WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+"  GROUP BY fecha ORDER BY fecha ASC";
+                this.setReportTable(query, " VENTAS POR MES DEL MES "+monthValue+" DEL AÑO "+yearValue);
+            }
+        }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -605,38 +606,46 @@ public class mainView extends javax.swing.JFrame {
         
         String query = "";
         String name = "";
-        String yearValue = (String) JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]);
-        
-        if (!yearValue.equals("Todos los años")) { 
-            String[] meses = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","Todos los meses"}; 
-            String monthValue = (String) JOptionPane.showInputDialog(null,"De que mes desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,meses,meses[0]);
-            if (!monthValue.equals("Todos los meses")) { 
-                ArrayList countries = dbman.executeQuery("SELECT name FROM country"); 
-                String[] paises = new String[countries.size()+1]; 
-                i = 0; 
-                for (Object country: countries){
-                    ArrayList row = (ArrayList) country; 
-                    paises[i] = (String) row.get(0);
-                    i++; 
+        String yearValue = String.valueOf(JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]));
+        if (!yearValue.equals("null")) {
+            if (!yearValue.equals("Todos los años")) { 
+                String[] meses = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","Todos los meses"}; 
+                String monthValue = String.valueOf(JOptionPane.showInputDialog(null,"De que mes desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,meses,meses[0]));
+                if (!monthValue.equals("null")) {
+                    if (!monthValue.equals("Todos los meses")) { 
+                        ArrayList countries = dbman.executeQuery("SELECT name FROM country"); 
+                        String[] paises = new String[countries.size()+1]; 
+                        i = 0; 
+                        for (Object country: countries){
+                            ArrayList row = (ArrayList) country; 
+                            paises[i] = (String) row.get(0);
+                            i++; 
+                        }
+                        paises[i] = "Todos los paises";
+                        String countryValue = String.valueOf(JOptionPane.showInputDialog(null,"De que pais desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,paises,paises[0]));
+                        if (!countryValue.equals("null")) {
+                            if (!countryValue.equals("Todos los paises")) { 
+                                query = "SELECT fecha, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+" AND forreports.country = '"+countryValue+"' GROUP BY fecha ORDER BY fecha ASC";
+                                name = " VENTAS POR PAIS EN EL AÑO "+yearValue+" EN EL MES "+monthValue;
+                                this.setReportTable(query, name);
+                            } else {
+                                query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+" GROUP BY country ORDER BY country ASC";
+                                name = " VENTAS POR PAIS EN EL AÑO "+yearValue+" EN EL MES "+monthValue;
+                                this.setReportTable(query, name);
+                            }   
+                        }
+                    } else {
+                        query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" GROUP BY country ORDER BY year ASC";
+                        name = " VENTAS POR PAIS EN EL AÑO "+yearValue;
+                        this.setReportTable(query, name);
+                    } 
                 }
-                paises[i] = "Todos los paises";
-                String countryValue = (String) JOptionPane.showInputDialog(null,"De que pais desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,paises,paises[0]);
-                if (!countryValue.equals("Todos los paises")) { 
-                    query = "SELECT fecha, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+" AND forreports.country = '"+countryValue+"' GROUP BY fecha ORDER BY fecha ASC";
-                    name = " VENTAS POR PAIS EN EL AÑO "+yearValue+" EN EL MES "+monthValue;
-                } else {
-                    query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+" GROUP BY country ORDER BY country ASC";
-                    name = " VENTAS POR PAIS EN EL AÑO "+yearValue+" EN EL MES "+monthValue;
-                }   
             } else {
-                query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" GROUP BY country ORDER BY year ASC";
-                name = " VENTAS POR PAIS EN EL AÑO "+yearValue;
-            }    
-        } else {
-            query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports GROUP BY country ORDER BY country ASC";
-            name = " VENTAS POR PAIS (HISTORICO)";
+                query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports GROUP BY country ORDER BY country ASC";
+                name = " VENTAS POR PAIS (HISTORICO)";
+                this.setReportTable(query, name);
+            }
         }
-        this.setReportTable(query, name);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
