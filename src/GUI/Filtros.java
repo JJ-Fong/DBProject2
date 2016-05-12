@@ -25,7 +25,7 @@ public class Filtros extends javax.swing.JFrame {
      */
     DBManager dbman;
     String lastQuery;
-    boolean ok, cancel; 
+    boolean ok, cancel,all; 
     
     ArrayList<JList> listas; 
     int currentList; 
@@ -36,7 +36,7 @@ public class Filtros extends javax.swing.JFrame {
         this.setTable();
         ok = false;
         cancel =  false;
-        
+        all =false; 
         listas = new ArrayList<>(); 
         
         JList lista = new JList(); 
@@ -101,6 +101,7 @@ public class Filtros extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -169,6 +170,13 @@ public class Filtros extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Original");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -190,7 +198,8 @@ public class Filtros extends javax.swing.JFrame {
                                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5)))
@@ -219,7 +228,8 @@ public class Filtros extends javax.swing.JFrame {
                         .addGap(58, 58, 58)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(jButton6)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -238,21 +248,43 @@ public class Filtros extends javax.swing.JFrame {
         String[] fieldsArray = new String[fields.size()-1]; 
         for (int i = 1; i < fields.size(); i++) { 
             ArrayList field = (ArrayList) fields.get(i);
-            fieldsArray[i-1] = String.valueOf(field.get(0)); 
+            fieldsArray[i-1] = String.valueOf(field.get(0));
         }
-        String selectedField = String.valueOf(JOptionPane.showInputDialog(null,"Campo:","Campo a cambiar",JOptionPane.QUESTION_MESSAGE,null,fieldsArray,fieldsArray[0]));
+        String selectedField = (String) JOptionPane.showInputDialog(null,"Campo:","Campo a cambiar",JOptionPane.QUESTION_MESSAGE,null,fieldsArray,fieldsArray[0]);
         if (!selectedField.equals("null")){
-            ArrayList field = (ArrayList) dbman.executeQuery("SELECT type FROM fields WHERE name = '"+selectedField+"';").get(0);
+            ArrayList field = (ArrayList) dbman.executeQuery("SELECT type,catalog FROM fields WHERE name = '"+selectedField+"';").get(0);
             String fieldType = String.valueOf(field.get(0)); 
+            String isCatalogS = String.valueOf(field.get(1));
+            boolean isCatalog = isCatalogS.equals("t"); 
             String[] logop = new String[] {"<","<=","=","<>",">=",">"};
             String selectedLOP = String.valueOf(JOptionPane.showInputDialog(null,"Relacion:","Relacion a evaluar",JOptionPane.QUESTION_MESSAGE,null,logop,logop[2]));
             if (!selectedLOP.equals("null")) {     
                 boolean accepted = false; 
                 String value = "";
+                String valueId = ""; 
                 while (!accepted && (value != null)) { 
-                    value = JOptionPane.showInputDialog(null, "Valor:", "Valor limite");
-                    if (value != null){
-                        accepted = this.checkType(value, fieldType);
+                    if (!isCatalog) { 
+                        value = JOptionPane.showInputDialog(null, "Valor:", "Valor limite");
+                        
+                        if (value != null){
+                            accepted = this.checkType(value, fieldType);
+
+                        }
+                    } else { 
+                        String catalogName = selectedField.substring(0,selectedField.length()-3); 
+                        ArrayList options = dbman.executeQuery("SELECT name FROM "+catalogName+";"); 
+                        String[] name = new String[options.size()];
+                        for (int i = 0; i < options.size(); i++) { 
+                            ArrayList row = (ArrayList) options.get(i); 
+                            name[i] = (String) row.get(0); 
+                        }
+                        value = (String) JOptionPane.showInputDialog(null,"Valor:","Valor referencia",JOptionPane.QUESTION_MESSAGE,null,name,name[0]);
+                        if (value != null){
+                            ArrayList valueArray = (ArrayList) dbman.executeQuery("SELECT id FROM "+catalogName+" WHERE name = '"+value+"';").get(0);
+                            valueId = (String) valueArray.get(0); 
+                            accepted = this.checkType(valueId, fieldType);
+                            if (accepted) value = valueId; 
+                        }
                     }
                 }
                 if (accepted) {
@@ -314,24 +346,24 @@ public class Filtros extends javax.swing.JFrame {
                 else if (field.equals("country_id")) { 
                     field = " c.name as country";
                     countryAdd = true; 
-                }
+                }       
                 else if (field.equals("type_id")) { 
                     field = " t.name as type";
                     typeAdd = true; 
                 }
                 query = query.concat(field+",");
             }
-        }
+        } 
         query = query.substring(0,query.length()-1);
         query = query.concat(" FROM client");
         if (genderAdd) { 
-            query = query.concat(" INNER JOIN gender g ON client.gender_id = gender.id");
+            query = query.concat(" INNER JOIN gender g ON client.gender_id = g.id");
         }
         if (countryAdd) { 
-            query = query.concat(" INNER JOIN country c ON client.country_id = country.id");
+            query = query.concat(" INNER JOIN country c ON client.country_id = c.id");
         }
         if (typeAdd) { 
-            query = query.concat(" INNER JOIN type t ON client.type_id = type.id");
+            query = query.concat(" INNER JOIN type t ON client.type_id = t.id");
         }
         
         query = query.concat(" WHERE");
@@ -350,8 +382,9 @@ public class Filtros extends javax.swing.JFrame {
             
             query = query.concat(" ) OR");
         }
-        query = query.substring(0, query.length()-5);
-        query = query.concat(");");
+        query = query.substring(0, query.length()-3);
+        if (!conditionFound) query = query.substring(0, query.length()-9);
+        query = query.concat(";");
         System.out.println(query);
            
         return query; 
@@ -361,6 +394,10 @@ public class Filtros extends javax.swing.JFrame {
         if (ok) { 
             String filter = queryGenerator(); 
             mainView mv = new mainView(filter);
+            mv.setVisible(true);
+        } else if (all) {
+            String query = "SELECT * FROM principal";
+            mainView mv = new mainView(query);
             mv.setVisible(true);
         } else {
             mainView mv = new mainView(lastQuery);
@@ -374,6 +411,12 @@ public class Filtros extends javax.swing.JFrame {
         listas.add(lista); 
         jTabbedPane1.add("List "+String.valueOf(listas.size()),lista); 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        all = true;
+        this.dispose(); 
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private boolean checkType(String value, String type) { 
         boolean flag = false; 
@@ -451,6 +494,7 @@ public class Filtros extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;

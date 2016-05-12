@@ -11,10 +11,12 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,7 +32,7 @@ public class mainView extends javax.swing.JFrame {
     DBManager dbman; 
     String queryActual; 
     ArrayList data, title; 
-    
+    JMenuItem menuAgregar, menuEliminar, menuModificar; 
     public mainView(){}
     
     public mainView(String query) {
@@ -50,59 +52,31 @@ public class mainView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem19 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem18 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jMenuItem13 = new javax.swing.JMenuItem();
-        jMenuItem14 = new javax.swing.JMenuItem();
-        jMenuItem15 = new javax.swing.JMenuItem();
-        jMenuItem16 = new javax.swing.JMenuItem();
-        jMenuItem17 = new javax.swing.JMenuItem();
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -160,6 +134,19 @@ public class mainView extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton6);
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/FinalMoney.png"))); // NOI18N
+        jButton4.setText("Agregar Venta");
+        jButton4.setBorderPainted(false);
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton4);
+
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/FinalTweet.png"))); // NOI18N
         jButton5.setText("Social Net.");
         jButton5.setBorderPainted(false);
@@ -173,6 +160,27 @@ public class mainView extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton5);
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
         jMenu1.setText("Menu");
 
         jMenu3.setText("Configuracion");
@@ -185,6 +193,14 @@ public class mainView extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItem2);
 
+        jMenuItem19.setText("Clean Sheet Protocol");
+        jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem19ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem19);
+
         jMenu1.add(jMenu3);
 
         jMenuItem1.setText("Ayuda");
@@ -194,61 +210,64 @@ public class mainView extends javax.swing.JFrame {
 
         jMenu2.setText("Reportes");
 
-        jMenu4.setText("Reportes Detalle");
+        jMenuItem18.setText("Ver Ventas");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem18);
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenu4.add(jMenuItem3);
+        jMenu4.setText("Reportes");
 
-        jMenuItem4.setText("jMenuItem4");
-        jMenu4.add(jMenuItem4);
+        jMenu5.setText("Ventas");
 
-        jMenuItem5.setText("jMenuItem5");
-        jMenu4.add(jMenuItem5);
+        jMenuItem3.setText("All Time");
+        jMenuItem3.setActionCommand(">por Año");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem3);
 
-        jMenuItem6.setText("jMenuItem6");
-        jMenu4.add(jMenuItem6);
+        jMenuItem4.setText("Anual");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem4);
 
-        jMenuItem7.setText("jMenuItem7");
-        jMenu4.add(jMenuItem7);
+        jMenuItem5.setText("Mensual");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem5);
+
+        jMenuItem6.setText("por Pais");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem6);
+
+        jMenu4.add(jMenu5);
 
         jMenu2.add(jMenu4);
 
-        jMenu5.setText("Reportes Resumen");
-        jMenu5.setToolTipText("");
-
-        jMenuItem8.setText("jMenuItem8");
-        jMenu5.add(jMenuItem8);
-
-        jMenuItem9.setText("jMenuItem9");
-        jMenu5.add(jMenuItem9);
-
-        jMenuItem10.setText("jMenuItem10");
-        jMenu5.add(jMenuItem10);
-
-        jMenuItem11.setText("jMenuItem11");
-        jMenu5.add(jMenuItem11);
-
-        jMenuItem12.setText("jMenuItem12");
-        jMenu5.add(jMenuItem12);
-
-        jMenu2.add(jMenu5);
-
         jMenu6.setText("Graficas");
 
-        jMenuItem13.setText("jMenuItem13");
-        jMenu6.add(jMenuItem13);
-
-        jMenuItem14.setText("jMenuItem14");
-        jMenu6.add(jMenuItem14);
-
-        jMenuItem15.setText("jMenuItem15");
-        jMenu6.add(jMenuItem15);
-
-        jMenuItem16.setText("jMenuItem16");
-        jMenu6.add(jMenuItem16);
-
-        jMenuItem17.setText("jMenuItem17");
-        jMenu6.add(jMenuItem17);
+        jMenuItem7.setText("Clientes");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem7);
 
         jMenu2.add(jMenu6);
 
@@ -261,12 +280,14 @@ public class mainView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1335, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(562, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -285,251 +306,115 @@ public class mainView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        boolean error = true;
-        String fName = "";
-        String LName = "";
-        String email = "";
-        String joined = "";
-        String birthday = "";
-        double points = 0.0;
-        int phone = 0;
-        String gName = "";
-        String pic = "";
-        String country = "";
-        String type = ""; //Premium, Gold, Regular
-        String username = "";
+        ArrayList fields = dbman.executeQuery("SELECT * FROM fields");
+        ArrayList catalogoGender = dbman.executeQuery("SELECT * FROM gender");
+        String[] gender = new String[catalogoGender.size()]; 
+        String[] genderId = new String[catalogoGender.size()]; 
         
-        ArrayList IDcliente = dbman.executeQuery("select * from client order by id");
-        ArrayList IDcountry = dbman.executeQuery("select * from country order by id");
-        ArrayList IDgender = dbman.executeQuery("select * from gender order by id");
-        ArrayList IDtwitter = dbman.executeQuery("select * from twitter order by id");
-        ArrayList IDtype = dbman.executeQuery("select * from type order by id");
-        
-        ArrayList cliente = (ArrayList) IDcliente.get(IDcliente.size()-1);
-        int idC =Integer.parseInt((String) cliente.get(0))+1;   
-        int idcont=0; //id Country
-        int idg=0; //id Gender
-        int idt=0; //id type
-        while (error) { //validacion e ingreso del nombre del cliente
-            fName = JOptionPane.showInputDialog(null, "Ingrese el Nombre del Cliente:",  "First_Name (text)", JOptionPane.WARNING_MESSAGE);
-            if (fName != null && fName.length()>0) {
-                error = false;
-            }
-        }
-        while (!error){//validacion e ingreso del apellido del cliente
-            LName = JOptionPane.showInputDialog(null, "Ingrese el Apellido del Cliente:",  "Last_Name (text)", JOptionPane.WARNING_MESSAGE);
-            if (LName != null && LName.length()>0) {
-                error = true;
-            }
-        }
-        while (error){  //validacion e ingreso del email del cliente
-            email = JOptionPane.showInputDialog(null, "Ingrese el E-Mail del Cliente","e-mail (text)",JOptionPane.WARNING_MESSAGE);
-            if (email != null && email.length()>0){
-                if (email.contains("@") && email.contains(".com")){
-                    String[] parts = email.split("@");
-                    String part2 = parts[1];
-                    if (part2.length()>6) {
-                        error = false;
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "ERROR! El e-mail debe contener un nombre@ejemplo.com correctamente");
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "ERROR! El e-mail debe contener un @ejemplo.com");
-                }
-            }
-        }
-        while (!error){//validacion e ingreso de fecha de join del cliente
-            joined = JOptionPane.showInputDialog(null, "Ingrese la fecha en que se unió el cliente:",  "joined_date ('YYYY-MM-DD')", JOptionPane.WARNING_MESSAGE);
-            if (joined != null && joined.length()>0){
-                dateManager dm = new dateManager();
-                error = dm.checkSintax(joined);
-                if (!error)
-                    JOptionPane.showMessageDialog(null, "ERROR! Fecha Join Incorrecta");
-                //error = true;
-            }
-        }
-        while (error){//validacion del cumpleanios del cliente
-            birthday = JOptionPane.showInputDialog(null, "Ingrese la fecha de Cumpleaños/Nacimiento del Cliente:", "birthday ('YYYY-MM-DD')", JOptionPane.WARNING_MESSAGE);
-            if (birthday != null && birthday.length()>0) {
-                dateManager dm = new dateManager();
-                boolean fl = true;
-                fl = dm.checkSintax(birthday);
-                if (fl) {
-                    error = false;
-                }
-                if (error)
-                    JOptionPane.showMessageDialog(null, "ERROR! Fecha Birthday Incorrecta");
-            }
-        }
-        while (!error){//validacion de puntuacion
-            try{
-                points = Double.parseDouble(JOptionPane.showInputDialog(null, "Ingrese la Puntuacion del Cliente:", "points (double)", JOptionPane.WARNING_MESSAGE));
-                if (points >=0 && points<=10000) {
-                    error = true;
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "ERROR! El punteo del cliente debe de estar entre 0 y 10000");
-                }
-            }catch (Exception ee){
-                JOptionPane.showMessageDialog(null, "ERROR! Debe de ingresar un numero.");
-            }
-        }
-        while (error){ //validacion del numero de telefono
-            String tel = JOptionPane.showInputDialog(null, "Ingrese el Número de Teléfono del Cliente:", "phone_number (int)", JOptionPane.WARNING_MESSAGE);
-            if (tel !=null && tel.length()>0){
-                if (tel.length()==8){
+        ArrayList newValues = new ArrayList(); 
+        int i = 1;
+        String value = ""; 
+        while ((i < fields.size())&& !(value == null)){
+            ArrayList field = (ArrayList) fields.get(i); 
+            String fieldName = (String) field.get(0);
+            String fieldType = (String) field.get(1);
+            String fieldCat = (String) field.get(2);
+            
+            boolean accepted = false; 
+            value = ""; 
+            while (!accepted && !(value == null)) { 
+                if (fieldName.equals("picture")) { 
                     try{
-                        phone = Integer.parseInt(tel);
-                        if(phone>=20000000 && phone <= 79999999){
-                            error = false;
+                        JFileChooser chooser = new JFileChooser();
+                        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
+                        chooser.setFileFilter(filter);
+                        int returnVal = chooser.showOpenDialog(null);
+                        chooser.setDialogTitle("Now Please Select the Client's Profile Picture");
+                        if(returnVal == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            value = file.getAbsolutePath();
+                            //System.out.println("PATHH: "+pic);
+                            JOptionPane.showMessageDialog(null, "You chose this profile picture: "+chooser.getSelectedFile());
+                           if (!value.toLowerCase().endsWith(".jpg")){
+                               JOptionPane.showMessageDialog(null, "ERROR! Debes de escoger una imagen .jpg");
+                               accepted = false; 
+                           } else {
+                               accepted = true; 
+                           }
                         }
-                        else{
-                            JOptionPane.showMessageDialog(null, "ERROR! Debe ingresar un numero valido");
-                        }
+                    } catch (Exception ee){
+                        JOptionPane.showMessageDialog(null,"Ha ocurrido un error con el ingreso de la imagen");
                     }
-                    catch (Exception ee){
-                        JOptionPane.showMessageDialog(null, "ERROR! Debe ingresar un numero");
+                } else if (fieldCat.equals("t")) {
+                    String catalogName = fieldName.substring(0,fieldName.length()-3); 
+                    ArrayList options = dbman.executeQuery("SELECT name FROM "+catalogName+";"); 
+                    String[] name = new String[options.size()];
+                    for (int j = 0; j < options.size(); j++) { 
+                        ArrayList row = (ArrayList) options.get(j); 
+                        name[j] = (String) row.get(0); 
                     }
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "ERROR! Debe ingresar un numero de 8 digitos.");
-                }
-            }
-        }
-        while(!error){ //validacion del genero
-            ArrayList tip = dbman.executeQuery("select name from gender;");
-            ArrayList ids = dbman.executeQuery("select id from gender;");
-            ArrayList<String> elem = new ArrayList();
-            ArrayList<String> id = new ArrayList();
-            for (int i = 0; i < tip.size(); i++) {
-                ArrayList temp = (ArrayList) tip.get(i);
-                ArrayList temp2 = (ArrayList) ids.get(i);
-                elem.add((String) temp.get(0));
-                id.add((String)temp2.get(0));
-            }
-            DefaultComboBoxModel model = new DefaultComboBoxModel(elem.toArray());
-            JComboBox cb = new JComboBox();
-            cb.setModel(model);
-            JOptionPane.showMessageDialog(null, cb, "Ingrese el Genero del Cliente", JOptionPane.QUESTION_MESSAGE);
-            gName = (String) cb.getSelectedItem();
-            //System.out.println("genero "+ gName);
-            for (int i = 0; i < ids.size(); i++) {
-                if (id.size() == elem.size()){
-                    if(gName.equals(elem.get(i))){
-                        idg = Integer.parseInt(id.get(i));
+                    value = (String) JOptionPane.showInputDialog(null,"Ingrese el valor de "+catalogName.toUpperCase(),catalogName.toUpperCase(),JOptionPane.QUESTION_MESSAGE,null,name,name[0]);
+                    if (value != null){
+                        ArrayList valueArray = (ArrayList) dbman.executeQuery("SELECT id FROM "+catalogName+" WHERE name = '"+value+"';").get(0);
+                        String valueId = (String) valueArray.get(0); 
+                        accepted = this.checkType(valueId, fieldType);
+                        if (accepted) value = valueId; 
                     }
+                } else { 
+                    value = JOptionPane.showInputDialog(null,"Ingrese el valor de "+fieldName.toUpperCase(),fieldName.toUpperCase(),JOptionPane.QUESTION_MESSAGE);
+                    accepted = checkType(value,fieldType);
                 }
             }
-            //System.out.println("idg: "+idg);
-            error = true;
+            newValues.add(value); 
+            i++;
         }
-        while (error){//validacion de pais
-            ArrayList tip = dbman.executeQuery("select name from country;");
-            ArrayList ids = dbman.executeQuery("select id from country;");
-            ArrayList<String> elem = new ArrayList();
-            ArrayList<String> id = new ArrayList();
-            for (int i = 0; i < tip.size(); i++) {
-                ArrayList temp = (ArrayList) tip.get(i);
-                ArrayList temp2 = (ArrayList) ids.get(i);
-                elem.add((String) temp.get(0));
-                id.add((String)temp2.get(0));
-            }
-            DefaultComboBoxModel model = new DefaultComboBoxModel(elem.toArray());
-            JComboBox cb = new JComboBox();
-            cb.setModel(model);
-            JOptionPane.showMessageDialog(null, cb, "Ingrese el Pais del Cliente", JOptionPane.QUESTION_MESSAGE);
-            country = (String) cb.getSelectedItem();
-            //System.out.println("country: "+ country);
-            for (int i = 0; i < ids.size(); i++) {
-                if (id.size() == elem.size()){
-                    if(country.equals(elem.get(i))){
-                        idcont = Integer.parseInt(id.get(i));
-                    }
-                }
-            }
-//            System.out.println("idcont: "+idcont);
-            error = false;
-        }
-        while(!error){ //validacion del tipo
-            ArrayList tip = dbman.executeQuery("select name from type;");
-            ArrayList ids = dbman.executeQuery("select id from type;");
-            ArrayList<String> elem = new ArrayList();
-            ArrayList<String> id = new ArrayList();
-            for (int i = 0; i < tip.size(); i++) {
-                ArrayList temp = (ArrayList) tip.get(i);
-                ArrayList temp2 = (ArrayList) ids.get(i);
-                elem.add((String) temp.get(0));
-                id.add((String)temp2.get(0));
-            }
-            DefaultComboBoxModel model = new DefaultComboBoxModel(elem.toArray());
-            JComboBox cb = new JComboBox();
-            cb.setModel(model);
-            JOptionPane.showMessageDialog(null, cb, "Ingrese el Tipo del Cliente", JOptionPane.QUESTION_MESSAGE);
-            type = (String) cb.getSelectedItem();
-            //System.out.println("tipo"+ type);
-            for (int i = 0; i < ids.size(); i++) {
-                if (id.size() == elem.size()){
-                    if(type.equals(elem.get(i))){
-                        idt = Integer.parseInt(id.get(i));
-                    }
-                }
-            }
-            //System.out.println("idt: "+idt);
-            error = true;
-        }
-        while(error){//validacion de la imagen del usuario
-            try{
-                JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
-                chooser.setFileFilter(filter);
-                int returnVal = chooser.showOpenDialog(null);
-                chooser.setDialogTitle("Now Please Select the Client's Profile Picture");
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = chooser.getSelectedFile();
-                    pic = file.getAbsolutePath();
-                    //System.out.println("PATHH: "+pic);
-                    JOptionPane.showMessageDialog(null, "You chose this profile picture: "+chooser.getSelectedFile());
-                   if (!pic.contains(".jpg")){
-                       JOptionPane.showMessageDialog(null, "ERROR! Debes de escoger una imagen .jpg");
-                   }
-                   else{
-                       error = false;
-                   }
-                }
-            }
-            catch (Exception ee){
-                JOptionPane.showMessageDialog(null,"Ha ocurrido un error con el ingreso de la imagen");
-            }
-        }
-        while(!error){
-            username = JOptionPane.showInputDialog(null, "username (text)", "Ingrese el usuario de Twitter del cliente:", JOptionPane.WARNING_MESSAGE);
-            if (username != null && username.length()>0) {
-                error = true;
-            }
-        }
-        //INSERTO DATOS PARA EL NUEVO CLIENTE
-        try{
-            String queryClient = "INSERT INTO client VALUES (DEFAULT, '"+ fName + "', '"+LName+ "', '"+email+ "', "+idg+",'"+joined+ "', '"+birthday+ "', "+idcont+ ", "+points+", "+idt+ ", '"+phone+ "', '"+pic+"')";
-            String queryTwitter = "INSERT INTO twitter VALUES ("+idC + ", '"+username+"')";
-            if (!queryClient.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Cliente creado exitosamente");
-                dbman.executeQuery(queryClient);
-                dbman.executeQuery(queryTwitter);
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Hubo un error con la creacion de un nuevo cliente.");
-            }
-        }catch (Exception ee){
-            JOptionPane.showMessageDialog(null, "Hubo un error con la creacion de un nuevo cliente.");
-        }
-        prepTable(queryActual); 
+        System.out.println(newValues);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    private boolean checkType(String value, String type) { 
+        boolean flag = false; 
+        if (value.length() > 0) { 
+            if (type.equals("integer")) { 
+                try { 
+                    int judge = Integer.parseInt(value); 
+                    flag = true; 
+                } catch (Exception e) { 
+                    flag = false; 
+                }
+            } else if (type.equals("text")) { 
+                flag = true; 
+            } else if (type.equals("date")) { 
+                dateManager dm = new dateManager(); 
+                flag = dm.checkSintax(value); 
+            } else if (type.equals("real")) {
+                try { 
+                    double judge = Double.parseDouble(value); 
+                    flag = true;
+                } catch (Exception e) {
+                    flag = false; 
+                }
+            } 
+            if (value==null) { 
+                flag = false;
+            }
+            if (!flag) { 
+                if (type.equals("date")) { 
+                    JOptionPane.showConfirmDialog(null, "Invalid value, this field is "+type.toUpperCase()+" sintax: YYYY-MM-DD");
+                } else {
+                    JOptionPane.showConfirmDialog(null, "Wrong data type, this field is "+type.toUpperCase());
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Tiene que ingresar algun valor");
+        }
+        return flag; 
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        delete();
+    }//GEN-LAST:event_jButton2ActionPerformed
+    
+    public void delete() { 
         int row = jTable1.getSelectedRow(); 
         if (row > -1) { 
             ArrayList reg = (ArrayList) data.get(row); 
@@ -537,26 +422,229 @@ public class mainView extends javax.swing.JFrame {
             dbman.executeQuery("DELETE FROM client WHERE id = "+id+";");
             prepTable(queryActual); 
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        edit(); 
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    public void edit() { 
         int row = jTable1.getSelectedRow(); 
         if (row > -1) { 
             ArrayList reg = (ArrayList) data.get(row); 
             String id = String.valueOf(reg.get(0)); 
             //AQUI VA ACTUALIZAR - EN ID ESTA EL ID
+            //System.out.println(id);
+            ArrayList data = dbman.executeQuery("select c.first_name,c.last_name,c.email,g.name,c.joined,c.birthday,con.name,c.points,t.name,c.phone,c.picture,tw.username from  client c join gender g on (c.gender_id = g.id) join country con on (con.id = c.country_id) join type t on (t.id = c.type_id) join twitter tw on (tw.client_id = c.id) where c.id ="+id+ ";");
+            ArrayList<String> input = (ArrayList<String>) data.get(0);
+            if (!id.equals("0")){
+                //Actualizar(id,input);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Debe Seleccionar un Cliente a Modificar");
+            }
+            prepTable(queryActual); 
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
+    }
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         String field = JOptionPane.showInputDialog(null, "Nombre del campo:");
         if (!field.equals("null")){
-            String[] types = new String[] {"Entero","Real","Fecha","Texto"};
-            
+            String[] types = new String[] {"Entero","Real","Fecha","Texto"};   
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+        // TODO add your handling code here:
+        Ventas sales = new Ventas(); 
+        sales.setVisible(true);
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        boolean accepted = false;
+        while (!accepted) { 
+            try {
+                String art = JOptionPane.showInputDialog(null,"Cantidad de articulos de la venta:"); 
+                int artCant = Integer.parseInt(art); 
+                String total = JOptionPane.showInputDialog(null,"Valor Total de la Venta:");
+                double totalCant = Double.parseDouble(total);
+                String date = JOptionPane.showInputDialog(null,"Fecha de la venta:"); 
+                dateManager dman = new dateManager(); 
+                accepted = dman.checkSintax(date); 
+                if (!accepted) { 
+                    JOptionPane.showMessageDialog(null, "Fecha Invalida"); 
+                }
+            } catch(Exception e) { 
+                JOptionPane.showMessageDialog(null, "Dato Invalido"); 
+                accepted = false; 
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
+        // TODO add your handling code here:
+        int opc = JOptionPane.showConfirmDialog(null, "Seguro que desea aplicar el CLEAN SHEET PROTOCOL?"); 
+        if (opc == 0) { 
+            String pw = JOptionPane.showInputDialog(null, "Ingrese contraseña:"); 
+            if (pw.equals("projectmanhattan")) { 
+                dbman.executeQuery("DELETE FROM client"); 
+                dbman.executeQuery("DELETE FROM venta"); 
+                this.prepTable(queryActual);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem19ActionPerformed
+
+    private void setReportTable(String query, String reportName) { 
+        JFrame reporte = new JFrame(); 
+        JTable table = new JTable(); 
+        JScrollPane pane = new JScrollPane(); 
+        
+        
+        ArrayList title = new ArrayList();
+        ArrayList data = new ArrayList(); 
+        try { 
+            ResultSet res = dbman.executeQueryV2(query); 
+            ResultSetMetaData rsmd = res.getMetaData(); 
+            
+            int colcount = rsmd.getColumnCount(); 
+            for (int i = 0; i < colcount; i++) {
+                title.add(rsmd.getColumnName(i+1)); 
+            } 
+            
+            int j = 0; 
+            while (res.next()) { 
+                ArrayList row = new ArrayList(); 
+                for (int i = 0; i < rsmd.getColumnCount(); i++){
+                    row.add(res.getString(i+1)); 
+                }
+                data.add(row); 
+            }
+            
+            
+        } catch(Exception e) { 
+            JOptionPane.showMessageDialog(null,"Error, por favor vuelva a intentarlo"); 
+        }
+        
+        Object[] titleArray = new Object[title.size()];
+        for (int i = 0; i < title.size(); i++) { 
+            titleArray[i] = title.get(i);
+        }
+        
+        Object[][] dataArray = new Object[data.size()][title.size()]; 
+        for (int i = 0; i < data.size(); i++) { 
+            ArrayList row = (ArrayList) data.get(i); 
+            for (int j = 0; j < row.size(); j++) {
+                dataArray[i][j] = row.get(j);
+            }
+        }
+        
+        DefaultTableModel model = new DefaultTableModel(dataArray, titleArray); 
+        table.setModel(new DefaultTableModel(dataArray, titleArray));
+        
+        reporte.setResizable(true);
+        reporte.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        reporte.setSize(700, 500);
+        pane.setViewportView(table); 
+        reporte.add(pane); 
+        reporte.setTitle("REPORTE: "+reportName.toUpperCase());
+        reporte.setVisible(true);
+    }
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        this.setReportTable("SELECT * FROM ventasxano", "VENTAS POR AÑO");
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        ArrayList years = dbman.executeQuery("SELECT * FROM saleyears"); 
+        String[] anos = new String[years.size()]; 
+        int i = 0; 
+        for (Object year: years){
+            ArrayList row = (ArrayList) year; 
+            anos[i] = (String) row.get(0);
+            i++; 
+        }
+        String value = (String) JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]);
+      
+        String query = "SELECT sq.month, sq.transacciones, sq.articulos, sq.totalMes, (sq.totalMes/total)*100 as porcentaje FROM (SELECT date_part('month',fecha) as month, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as totalmes, ventasxano.total as total FROM forreports JOIN ventasxano ON date_part('year', fecha) = ventasxano.\"año\" WHERE date_part('year',fecha) = "+value+" GROUP BY month, ventasxano.total ORDER BY month ASC) as sq;";
+        this.setReportTable(query, " VENTAS POR MES DEL AÑO "+value);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        ArrayList years = dbman.executeQuery("SELECT * FROM saleyears"); 
+        String[] anos = new String[years.size()]; 
+        int i = 0; 
+        for (Object year: years){
+            ArrayList row = (ArrayList) year; 
+            anos[i] = (String) row.get(0);
+            i++; 
+        }
+        String yearValue = (String) JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]);
+        String[] meses = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12"}; 
+        String monthValue = (String) JOptionPane.showInputDialog(null,"De que mes desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,meses,meses[0]);
+        
+        
+        
+        String query = "SELECT forreports.fecha, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as totaldia FROM forreports  WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+"  GROUP BY fecha ORDER BY fecha ASC";
+        this.setReportTable(query, " VENTAS POR MES DEL MES "+monthValue+" DEL AÑO "+yearValue);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        ArrayList years = dbman.executeQuery("SELECT * FROM saleyears"); 
+        String[] anos = new String[years.size()+1]; 
+        int i = 0; 
+        for (Object year: years){
+            ArrayList row = (ArrayList) year; 
+            anos[i] = (String) row.get(0);
+            i++; 
+        }
+        anos[i] = "Todos los años"; 
+        
+        String query = "";
+        String name = "";
+        String yearValue = (String) JOptionPane.showInputDialog(null,"De que año desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,anos,anos[0]);
+        
+        if (!yearValue.equals("Todos los años")) { 
+            String[] meses = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","Todos los meses"}; 
+            String monthValue = (String) JOptionPane.showInputDialog(null,"De que mes desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,meses,meses[0]);
+            if (!monthValue.equals("Todos los meses")) { 
+                ArrayList countries = dbman.executeQuery("SELECT name FROM country"); 
+                String[] paises = new String[countries.size()+1]; 
+                i = 0; 
+                for (Object country: countries){
+                    ArrayList row = (ArrayList) country; 
+                    paises[i] = (String) row.get(0);
+                    i++; 
+                }
+                paises[i] = "Todos los paises";
+                String countryValue = (String) JOptionPane.showInputDialog(null,"De que pais desea ver reporte","",JOptionPane.QUESTION_MESSAGE,null,paises,paises[0]);
+                if (!countryValue.equals("Todos los paises")) { 
+                    query = "SELECT fecha, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+" AND forreports.country = '"+countryValue+"' GROUP BY fecha ORDER BY fecha ASC";
+                    name = " VENTAS POR PAIS EN EL AÑO "+yearValue+" EN EL MES "+monthValue;
+                } else {
+                    query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" AND date_part('month',fecha) = "+monthValue+" GROUP BY country ORDER BY country ASC";
+                    name = " VENTAS POR PAIS EN EL AÑO "+yearValue+" EN EL MES "+monthValue;
+                }   
+            } else {
+                query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports WHERE date_part('year',fecha) = "+yearValue+" GROUP BY country ORDER BY year ASC";
+                name = " VENTAS POR PAIS EN EL AÑO "+yearValue;
+            }    
+        } else {
+            query = "SELECT forreports.country as country, COUNT(forreports.client_id) as transacciones, SUM(forreports.articulos) as articulos, SUM(forreports.total) as total FROM forreports GROUP BY country ORDER BY country ASC";
+            name = " VENTAS POR PAIS (HISTORICO)";
+        }
+        this.setReportTable(query, name);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        Control c = new Control();
+        c.setVisible(true);
+        c.setTitle("GRÁFICAS");
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
     
     private void prepTable(String query) { 
         title = new ArrayList();
@@ -608,6 +696,10 @@ public class mainView extends javax.swing.JFrame {
         });
     }
     
+    public void addSale() { 
+        
+    }
+    
     /*
      * @param args the command line arguments
      */
@@ -647,6 +739,7 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JMenu jMenu1;
@@ -657,22 +750,14 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
-    private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem16;
-    private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem18;
+    private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
