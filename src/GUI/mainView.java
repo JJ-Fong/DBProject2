@@ -75,7 +75,6 @@ public class mainView extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu6 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -259,17 +258,13 @@ public class mainView extends javax.swing.JFrame {
 
         jMenu2.add(jMenu4);
 
-        jMenu6.setText("Graficas");
-
-        jMenuItem7.setText("Clientes");
+        jMenuItem7.setText("Graficas");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem7ActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem7);
-
-        jMenu2.add(jMenu6);
+        jMenu2.add(jMenuItem7);
 
         jMenuBar1.add(jMenu2);
 
@@ -295,7 +290,8 @@ public class mainView extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        
+        socialMedia so = new socialMedia();
+        so.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -307,20 +303,18 @@ public class mainView extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ArrayList fields = dbman.executeQuery("SELECT * FROM fields");
-        ArrayList catalogoGender = dbman.executeQuery("SELECT * FROM gender");
-        String[] gender = new String[catalogoGender.size()]; 
-        String[] genderId = new String[catalogoGender.size()]; 
-        
         ArrayList newValues = new ArrayList(); 
         int i = 1;
         String value = ""; 
+        boolean accepted; 
+        boolean tracker = true; 
         while ((i < fields.size())&& !(value == null)){
             ArrayList field = (ArrayList) fields.get(i); 
             String fieldName = (String) field.get(0);
             String fieldType = (String) field.get(1);
             String fieldCat = (String) field.get(2);
             
-            boolean accepted = false; 
+            accepted = false; 
             value = ""; 
             while (!accepted && !(value == null)) { 
                 if (fieldName.equals("picture")) { 
@@ -363,16 +357,56 @@ public class mainView extends javax.swing.JFrame {
                 } else { 
                     value = JOptionPane.showInputDialog(null,"Ingrese el valor de "+fieldName.toUpperCase(),fieldName.toUpperCase(),JOptionPane.QUESTION_MESSAGE);
                     accepted = checkType(value,fieldType);
+                    if(accepted){ 
+                        if (fieldName.equals("email")){
+                            int pivot = value.indexOf("@");
+                            if (pivot  > -1){
+                                String izq = value.substring(0,pivot);
+                                String der = value.substring(pivot+1, value.length());
+                                if (!((izq.length() > 0)&&(der.length()>4)&&(!izq.contains("@"))&&(!der.contains("@"))&&((der.endsWith(".com")||der.endsWith(".net"))))){
+                                    JOptionPane.showMessageDialog(null, "Email invalido. Sintaxis: ejemplo@correo.com");
+                                    accepted = false;
+                                }
+                            }  else {
+                                JOptionPane.showMessageDialog(null, "Email invalido. Sintaxis: ejemplo@correo.com");
+                                accepted = false; 
+                            }
+                        }
+                    }
                 }
             }
-            newValues.add(value); 
-            if (accepted) { 
+            if (accepted) {
+                if (fieldType.equals("text")||fieldType.equals("date")) {
+                    newValues.add("'"+value+"'");
+                } else {
+                    newValues.add(value);
+                }
                 
-            }
+            } 
+            tracker = tracker&&accepted;
             i++;
         }
-        
-        System.out.println(newValues);
+        if (tracker) { 
+            String query = "INSERT INTO client (";
+            for (int j = 0; j < fields.size(); j++){
+                ArrayList field = (ArrayList) fields.get(j); 
+                String fieldName = (String) field.get(0);
+                query = query.concat(fieldName+", "); 
+            }
+            query = query.substring(0,query.length()-2); 
+            query = query.concat(") VALUES ( DEFAULT, ");
+            for (int j = 0; j < newValues.size(); j++){
+                String val = (String) newValues.get(j);
+                query = query.concat(val+", "); 
+            }
+            query = query.substring(0,query.length()-2);
+            query = query.concat(");");
+            System.out.println(query);
+            
+            ArrayList msg = (ArrayList) dbman.executeQuery(query);
+            prepTable(queryActual); 
+            
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
     private boolean checkType(String value, String type) { 
         boolean flag = false; 
@@ -433,7 +467,115 @@ public class mainView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
     
     private void modificar(String id) { 
-        
+        ArrayList oldValues = (ArrayList)dbman.executeQuery("SELECT * FROM client WHERE id = "+id).get(0); 
+        ArrayList fields = dbman.executeQuery("SELECT * FROM fields");
+        ArrayList newValues = new ArrayList(); 
+        int i = 1;
+        String value = ""; 
+        boolean accepted; 
+        boolean tracker = true; 
+        while ((i < fields.size())&& !(value == null)){
+            ArrayList field = (ArrayList) fields.get(i); 
+            String fieldName = (String) field.get(0);
+            String fieldType = (String) field.get(1);
+            String fieldCat = (String) field.get(2);
+            
+            accepted = false; 
+            value = ""; 
+            while (!accepted && !(value == null)) { 
+                if (fieldName.equals("picture")) { 
+                    try{
+                        JFileChooser chooser = new JFileChooser();
+                        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
+                        chooser.setFileFilter(filter);
+                        int returnVal = chooser.showOpenDialog(null);
+                        chooser.setDialogTitle("Now Please Select the Client's Profile Picture");
+                        if(returnVal == JFileChooser.APPROVE_OPTION) {
+                            File file = chooser.getSelectedFile();
+                            value = file.getAbsolutePath();
+                            //System.out.println("PATHH: "+pic);
+                            JOptionPane.showMessageDialog(null, "You chose this profile picture: "+chooser.getSelectedFile());
+                           if (!value.toLowerCase().endsWith(".jpg")){
+                               JOptionPane.showMessageDialog(null, "ERROR! Debes de escoger una imagen .jpg");
+                               accepted = false; 
+                           } else {
+                               accepted = true; 
+                           }
+                        }
+                    } catch (Exception ee){
+                        JOptionPane.showMessageDialog(null,"Ha ocurrido un error con el ingreso de la imagen");
+                    }
+                } else if (fieldCat.equals("t")) {
+                    String catalogName = fieldName.substring(0,fieldName.length()-3); 
+                    ArrayList options = dbman.executeQuery("SELECT name FROM "+catalogName+";"); 
+                    String[] name = new String[options.size()];
+                    for (int j = 0; j < options.size(); j++) { 
+                        ArrayList row = (ArrayList) options.get(j); 
+                        name[j] = (String) row.get(0); 
+                    }
+                    value = (String) JOptionPane.showInputDialog(null,"Ingrese el valor de "+catalogName.toUpperCase(),catalogName.toUpperCase(),JOptionPane.QUESTION_MESSAGE,null,name,name[0]);
+                    if (value != null){
+                        ArrayList valueArray = (ArrayList) dbman.executeQuery("SELECT id FROM "+catalogName+" WHERE name = '"+value+"';").get(0);
+                        String valueId = (String) valueArray.get(0); 
+                        accepted = this.checkType(valueId, fieldType);
+                        if (accepted) value = valueId; 
+                    }
+                } else { 
+                    String defVal = String.valueOf(oldValues.get(i)); 
+                    value = JOptionPane.showInputDialog(null,"Ingrese el valor de "+fieldName.toUpperCase(),fieldName.toUpperCase(),JOptionPane.QUESTION_MESSAGE,null,null,defVal).toString();
+                    accepted = checkType(value,fieldType);
+                    if(accepted){ 
+                        if (fieldName.equals("email")){
+                            int pivot = value.indexOf("@");
+                            if (pivot  > -1){
+                                String izq = value.substring(0,pivot);
+                                String der = value.substring(pivot+1, value.length());
+                                if (!((izq.length() > 0)&&(der.length()>4)&&(!izq.contains("@"))&&(!der.contains("@"))&&((der.endsWith(".com")||der.endsWith(".net"))))){
+                                    JOptionPane.showMessageDialog(null, "Email invalido. Sintaxis: ejemplo@correo.com");
+                                    accepted = false;
+                                }
+                            }  else {
+                                JOptionPane.showMessageDialog(null, "Email invalido. Sintaxis: ejemplo@correo.com");
+                                accepted = false; 
+                            }
+                        }
+                    }
+                }
+            }
+            if (accepted) {
+                if (fieldType.equals("text")||fieldType.equals("date")) {
+                    newValues.add("'"+value+"'");
+                } else {
+                    newValues.add(value);
+                }
+                
+            } 
+            tracker = tracker&&accepted;
+            i++;
+        }
+        /*
+        if (tracker) { 
+            String query = "INSERT INTO client (";
+            for (int j = 0; j < fields.size(); j++){
+                ArrayList field = (ArrayList) fields.get(j); 
+                String fieldName = (String) field.get(0);
+                query = query.concat(fieldName+", "); 
+            }
+            query = query.substring(0,query.length()-2); 
+            query = query.concat(") VALUES ( DEFAULT, ");
+            for (int j = 0; j < newValues.size(); j++){
+                String val = (String) newValues.get(j);
+                query = query.concat(val+", "); 
+            }
+            query = query.substring(0,query.length()-2);
+            query = query.concat(");");
+            System.out.println(query);
+            
+            ArrayList msg = (ArrayList) dbman.executeQuery(query);
+            prepTable(queryActual); 
+            
+        }
+        */
     }
     
     public void edit() { 
@@ -671,7 +813,13 @@ public class mainView extends javax.swing.JFrame {
             while (res.next()) { 
                 ArrayList row = new ArrayList(); 
                 for (int i = 0; i < rsmd.getColumnCount(); i++){
-                    row.add(res.getString(i+1)); 
+                    if (i==0){
+                        String reg = res.getString(i+1);
+                        String value = reg.substring(1,reg.indexOf(","));
+                        row.add(value);
+                    } else { 
+                        row.add(res.getString(i+1));
+                    }
                 }
                 data.add(row); 
             }
@@ -756,7 +904,6 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem18;
